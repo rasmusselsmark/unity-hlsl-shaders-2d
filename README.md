@@ -78,10 +78,12 @@ HLSL shaders are written in code, and gives you a basic understanding of shader 
 
 See [SolidShader.shader](Assets/Shaders/SolidShader/SolidShader.shader) for the shader code for this shader.
 
+
 ## SolidColorShader
 
-1. Like the `SolidShader` in previous section, create a new `Shaders/SolidColorShader/SolidColorShader.shader`
-1. It will be similar to the `SolidShader`, with a few changes
+In order to choose which color to draw, we add a `Color` property for the shader, which can then be selected on the material.
+
+1. Make the following changes to the `SolidShader`
    - Define a `_Color` property for the shader, which will control which color we're drawing:
      ```
      Properties
@@ -98,9 +100,37 @@ See [SolidShader.shader](Assets/Shaders/SolidShader/SolidShader.shader) for the 
          return col;
      }
      ```
-1. Create a new material for the shader, and assign it to a game object.
 1. It should now be possible to select a color when selecting the material in Unity:
    ![SolidColorShader example](Documentation/Images/SolidColorShader.png)
+
+The complete source for this shader can be found in [SolidColorShader.shader](Assets/Shaders/SolidColorShader/SolidColorShader.shader)
+
+
+## GradientColorShader
+
+Next we make the shader gradient, by using the x-coordinate to set alpha/transparency in the fragment shader
+
+1. First we set the tags and specify blend, in order to render transparent colors. Change the following part of the shader:
+    ```
+    SubShader
+    {
+        Tags { "Queue"="Transparent" "RenderType"="Transparent" }
+        Blend SrcAlpha OneMinusSrcAlpha
+        LOD 100
+    ```
+1. In the fragment shader method, we multiply the color with a transparency value defined by `i.uv.x`, i.e. the x-coordinate of the drawn pixel:
+    ```
+    fixed4 _Color;
+    fixed4 frag (v2f i) : SV_Target
+    {
+        fixed4 col = fixed4(1, 1, 1, i.uv.x) * _Color;
+        return col;
+    }
+    ```
+1. When used on a game object, it should look like this:
+   ![GradientColorShader example](Documentation/Images/GradientColorShader.png)
+
+The complete source for this shader can be found in [GradientColorShader.shader](Assets/Shaders/GradientColorShader/GradientColorShader.shader)
 
 
 # Links and credits
