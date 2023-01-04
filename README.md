@@ -4,7 +4,9 @@
 
 HLSL shaders are written in code, and gives you a basic understanding of shader programming. It's also possible to use [Unity Shader Graph](https://docs.unity3d.com/Manual/shader-graph.html)
 
-# Create first simple solid shader
+# Shader examples
+
+## Create first simple solid shader
 
 1. In Project window, right click and select `Create->Shaders->Unlit Shader`
 1. Rename the created shader to e.g. `SolidShader`
@@ -74,8 +76,33 @@ HLSL shaders are written in code, and gives you a basic understanding of shader 
 1. If everything works, it should now look like this:
    ![SolidShader example](Documentation/Images/SolidShader.png)
 
-See [SolidShader.shader](Assets/Shaders/SolidShader/SolidShader.shader) for how the final shader code
+See [SolidShader.shader](Assets/Shaders/SolidShader/SolidShader.shader) for the shader code for this shader.
 
+## SolidColorShader
+
+1. Like the `SolidShader` in previous section, create a new `Shaders/SolidColorShader/SolidColorShader.shader`
+1. It will be similar to the `SolidShader`, with a few changes
+   - Define a `_Color` property for the shader, which will control which color we're drawing:
+     ```
+     Properties
+     {
+         _Color("Color: ", color) = (0,0,0,0)
+     }
+     And the fragment shader method returns the selected color:
+     ```
+     fixed4 _Color;
+     fixed4 frag (v2f i) : SV_Target
+     {
+         fixed4 col = _Color;
+         return col;
+     }
+     ```
+1. Create a new material for the shader, and assign it to a game object.
+1. It should now be possible to select a color when selecting the material in Unity:
+   ![SolidColorShader example](Documentation/Images/SolidColorShader.png)
+
+
+# Links and credits
 
 ## Recommended videos:
 * [Shader Fundamentals](https://www.youtube.com/playlist?list=PLq4ehwQIHfrUHo2UcxDAl_gcPLb2f3T2y)
