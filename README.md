@@ -88,7 +88,8 @@ See [SolidShader.shader](Assets/Shaders/SolidShader/SolidShader.shader) for the 
      {
          _Color("Color: ", color) = (0,0,0,0)
      }
-     And the fragment shader method returns the selected color:
+     ```
+     The fragment shader method simply returns the selected color:
      ```
      fixed4 _Color;
      fixed4 frag (v2f i) : SV_Target
