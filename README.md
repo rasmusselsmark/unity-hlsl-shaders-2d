@@ -133,6 +133,44 @@ Next we make the shader gradient, by using the x-coordinate to set alpha/transpa
 The complete source for this shader can be found in [GradientColorShader.shader](Assets/Shaders/GradientColorShader/GradientColorShader.shader)
 
 
+## RotatingBarShader
+
+We can also make "animated" shaders by multiplying with time. This will mostly be similar to [SolidColorShader](#solidcolorshader).
+
+1. Define following properties, for setting color, speed and number (intensity) of bars:
+   ```
+   Properties
+   {
+        _Color("Color: ", color) = (0,0,0,0)
+        _Speed("Speed: ", float) = 10
+        _Intensity("Intensity: ", float) = 50
+   }
+   ```
+1. With the following fragment shader part:
+   ```
+   float4 _Color;
+   float _Speed;
+   float _Intensity;
+
+   fixed4 frag (v2f i) : SV_Target
+   {
+       float barEffect = sin(
+           (1 - i.uv.x) // have bars move from left to right
+           * _Intensity // number of bars
+           + _Time.y * _Speed) // rotate bars
+           * 0.5 + 0.5; // sinus returns value [-1..1], transform to [0..1]
+       float4 color = barEffect * _Color;
+
+       return fixed4(color.rgb, barEffect);
+   }
+   ```
+1. When used on a game object, it could look like this:
+   ![RotatingBarShader example](Documentation/Images/RotatingBarShader.png)
+
+
+The complete source for this shader can be found in [RotatingBarShader.shader](Assets/Shaders/RotatingBarShader/RotatingBarShader.shader)
+
+
 # Links and credits
 
 ## Recommended videos:
