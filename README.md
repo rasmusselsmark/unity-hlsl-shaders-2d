@@ -133,6 +133,48 @@ Next we make the shader gradient, by using the x-coordinate to set alpha/transpa
 The complete source for this shader can be found in [GradientColorShader.shader](Assets/Shaders/GradientColorShader/GradientColorShader.shader)
 
 
+## GradientTextureShader
+
+The gradient texture can be used on a texture, to make a gradient image in your game.
+
+1. Create a new shader named `GradientTextureShader`
+1. Define properties and that it's a transparent shader:
+   ```
+   Properties
+   {
+       _MainTex ("Texture", 2D) = "white" {}
+       _Color("Color: ", color) = (0,0,0,1)
+   }
+   SubShader
+   {
+       Tags { "Queue"="Transparent" "RenderType"="Transparent" }
+       Blend SrcAlpha OneMinusSrcAlpha
+   ```
+1. The shader methods:
+    ```
+    sampler2D _MainTex;
+    fixed4 _Color;
+
+    v2f vert (appdata v)
+    {
+        v2f o;
+        o.vertex = UnityObjectToClipPos(v.vertex);
+        o.uv = v.uv;
+        return o;
+    }
+
+    fixed4 frag (v2f i) : SV_Target
+    {
+        // make texture gradient by using UV.x value
+        return fixed4(1, 1, 1, i.uv.x) * _Color;
+    }
+    ```
+1. Used with a cloud picture in our case, looks like:
+   ![GradientTextureShader example](Documentation/Images/GradientTextureShader.png)
+
+The complete source for this shader can be found in [GradientTextureShader.shader](Assets/Shaders/GradientTextureShader/GradientTextureShader.shader)
+
+
 ## RotatingBarShader
 
 We can also make "animated" shaders by multiplying with time. This will mostly be similar to [SolidColorShader](#solidcolorshader).
